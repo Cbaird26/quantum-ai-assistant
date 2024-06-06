@@ -31,7 +31,7 @@ def ask_gpt4(prompt):
         ],
         max_tokens=500,
     )
-    return response.choices[0].message["content"]
+    return response['choices'][0]['message']['content']
 
 # Streamlit app
 def main():
