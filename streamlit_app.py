@@ -14,29 +14,38 @@ service = QiskitRuntimeService(
 
 # Function to interact with OpenAI GPT-4
 def ask_gpt4(prompt):
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": prompt}
-        ]
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=500
     )
-    return response['choices'][0]['message']['content']
+    return response.choices[0].text.strip()
 
 # Function to run a quantum circuit
 def run_quantum_circuit(circuit, backend_name):
     backend = service.backend(backend_name)
-    transpiled_circuit = transpile(circuit, backend=backend)
+    transpiled_circuit = transpile(circuit, backend)
     job = backend.run(transpiled_circuit)
-    return job.result()
+    result = job.result()
+    return result
 
 # Streamlit app
 def main():
     st.title("Quantum AI Assistant")
     query = st.text_input("Enter your question:")
+    
     if query:
-        ai_response = ask_gpt4(query)
-        st.write(ai_response)
+        with st.spinner("Running quantum circuit..."):
+            # Create a simple quantum circuit
+            circuit = QuantumCircuit(1, 1)
+            circuit.h(0)
+            circuit.measure(0, 0)
+            result = run_quantum_circuit(circuit, 'ibmq_qasm_simulator')
+            st.write(f"Quantum result: {result.get_counts()}")
+
+        with st.spinner("Getting AI response..."):
+            ai_response = ask_gpt4(query)
+            st.write(f"AI response: {ai_response}")
 
 if __name__ == "__main__":
     main()
