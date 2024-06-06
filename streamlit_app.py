@@ -21,7 +21,7 @@ def run_quantum_circuit(circuit, backend_name):
         result = job.result()
     return result.get_counts()
 
-# Function to interact with OpenAI GPT-4
+# Function to interact with OpenAI GPT-4 using the correct API method
 def ask_gpt4(prompt):
     response = openai.ChatCompletion.create(
         model="gpt-4",
@@ -31,7 +31,7 @@ def ask_gpt4(prompt):
         ],
         max_tokens=500,
     )
-    return response['choices'][0]['message']['content']
+    return response.choices[0].message['content']
 
 # Streamlit app
 def main():
