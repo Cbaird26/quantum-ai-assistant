@@ -8,7 +8,7 @@ openai.api_key = 'sk-proj-rjQkZR2EpFXe0O6fQ0gjT3BlbkFJ57LMTOzYuycUalwgCQvp'
 
 # Load IBM Quantum account and set up service
 service = QiskitRuntimeService(
-    token='efaee3112cb68eb568bde505587ca5c445cb28d0469c0704bd13d947fa7db08bc',
+    token='efaee3112cb68eb568bde505587ca5c445cb28d0469c0704bd13d947fa7d9b4ece88e056397209eba60e573d1abf966d721132824147d841b90c3de33e8ff817',
     channel='ibm_quantum',
 )
 
