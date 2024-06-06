@@ -16,8 +16,7 @@ service = QiskitRuntimeService(
 def run_quantum_circuit(circuit, backend_name):
     backend = service.backend(backend_name)
     transpiled_circuit = transpile(circuit, backend=backend)
-    qobj = assemble(transpiled_circuit, backend=backend)
-    job = backend.run(qobj)
+    job = backend.run(transpiled_circuit)
     result = job.result()
     return result
 
