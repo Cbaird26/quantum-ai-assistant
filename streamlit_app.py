@@ -1,31 +1,34 @@
 import streamlit as st
 from qiskit_ibm_runtime import QiskitRuntimeService, Session, Options
-from qiskit import QuantumCircuit, transpile
+from qiskit import QuantumCircuit, transpile, assemble
 import openai
 
 # Set your OpenAI API key
-openai.api_key = 'sk-proj-rjQkZR2EpFXe0O6fQ0gjT3BlbkFJ57LMTOzYuycUalwgCQvp'
+openai.api_key = 'sk-proj-rjQkZR2EpFXe0O6fQ0gjT3BlbkFJ57LMTOzYuycUalwgC'
 
 # Load IBM Quantum account and set up service
 service = QiskitRuntimeService(
     channel='ibm_quantum',
-    token='efaee3112cb68eb568bde505587ca5c445cb28d0469c0704bd13d947fa7d9b4ece88e056397209eba60e573d1abf966d721132824147d841b90c3de33e8ff817'
+    token='efaee3112cb68eb568bde505587ca5c445cb28d0469c0704bd13d947fa7d36074'
 )
 
 # Function to interact with OpenAI GPT-4
 def ask_gpt4(prompt):
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=500
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ]
     )
-    return response.choices[0].text.strip()
+    return response.choices[0].message['content'].strip()
 
 # Function to run a quantum circuit
 def run_quantum_circuit(circuit, backend_name):
     backend = service.backend(backend_name)
     transpiled_circuit = transpile(circuit, backend)
-    job = backend.run(transpiled_circuit)
+    qobj = assemble(transpiled_circuit)
+    job = backend.run(qobj)
     result = job.result()
     return result
 
