@@ -7,11 +7,11 @@ from qiskit import QuantumCircuit, transpile, execute
 import openai
 
 # Set your OpenAI API key
-openai.api_key = 'YOUR_OPENAI_API_KEY'
+openai.api_key = 'sk-proj-rjQkZR2EpFXe0O6fQ0gjT3BlbkFJ57LMTOzYuycUalwgCQvp'
 
 # Load IBMQ account and set up provider
 try:
-    provider = IBMProvider(token='YOUR_IBM_Q_TOKEN')
+    provider = IBMProvider(token='efaee3112cb68eb568bde505587ca5c445cb28d0469c0704bd13d947fa7d9b4ece88e056397209eba60e573d1abf966d721132824147d841b90c3de33e8ff817')
 except IBMProviderError as e:
     print(f"Failed to load IBM Q account: {e}")
 
