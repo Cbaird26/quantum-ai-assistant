@@ -4,7 +4,7 @@ from qiskit import QuantumCircuit, transpile
 import streamlit as st
 
 # Set your OpenAI API key
-openai.api_key = 'sk-proj-rjQkZR2EpFXe0O6fQ0gjT3BlbkFJ57LMTOzYuycUalwgCQvp'
+openai.api_key = 'YOUR_OPENAI_API_KEY'
 
 # Load IBM Quantum account and set up service
 service = QiskitRuntimeService()
@@ -20,12 +20,15 @@ def run_quantum_circuit(circuit, backend_name):
 
 # Function to interact with OpenAI GPT-4
 def ask_gpt4(prompt):
-    response = openai.Completion.create(
-        model="gpt-3.5-turbo",
-        prompt=prompt,
-        max_tokens=500
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt},
+        ],
+        max_tokens=500,
     )
-    return response.choices[0].text.strip()
+    return response.choices[0].message["content"].strip()
 
 # Streamlit app
 def main():
