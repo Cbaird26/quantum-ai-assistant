@@ -28,8 +28,7 @@ def ask_gpt4(prompt):
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": prompt},
-        ],
-        max_tokens=500,
+        ]
     )
     return response.choices[0].message['content']
 
