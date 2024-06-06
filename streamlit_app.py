@@ -2,7 +2,7 @@ import streamlit as st
 import openai
 
 # Set your OpenAI API key
-openai.api_key = 'sk-proj-rjQkZR2EpFXe0O6fQ0gjT3BlbkFJ57LMTOzYuycUalwgCQvp'
+openai.api_key = 'sk-proj-rjQkZR2EpFXe0O6fQ0gjT3BlbkFJ57LMTOzYuycUalwgC'
 
 # Function to interact with OpenAI GPT
 def ask_gpt(prompt):
@@ -18,18 +18,24 @@ def ask_gpt(prompt):
 
 # Streamlit app
 def main():
-    st.title("Simple OpenAI Integration with Streamlit")
+    st.title("AI Assistant with Conversational History")
 
-    prompt = "Here is our conversation history:\nMe: Hello! How can I help you today?\nYou: I'm looking for information on AI assistants.\nMe: Great! I can help you with that. What specifically would you like to know?\n"
-    prompt += "Now, continue the conversation:\nYou:"
-    
-    query = st.text_input("Enter your question:", "What can AI assistants do?")
+    # Initialize session state for conversation history
+    if 'conversation_history' not in st.session_state:
+        st.session_state.conversation_history = ""
+
+    query = st.text_input("Enter your question:")
 
     if query:
         with st.spinner("Getting AI response..."):
-            final_prompt = prompt + query
+            final_prompt = st.session_state.conversation_history + "You: " + query + "\n"
             ai_response = ask_gpt(final_prompt)
+            st.session_state.conversation_history += "You: " + query + "\n" + "AI: " + ai_response + "\n"
             st.write(f"AI response: {ai_response}")
+
+    # Display the conversation history
+    st.subheader("Conversation History")
+    st.text(st.session_state.conversation_history)
 
 if __name__ == "__main__":
     main()
