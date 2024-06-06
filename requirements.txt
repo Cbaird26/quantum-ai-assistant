@@ -2,3 +2,4 @@ qiskit==1.1.0
 qiskit-ibm-provider==0.11.0
 openai==1.31.2
 streamlit==1.35.0
+qiskit-ibm-runtime
