@@ -1,6 +1,6 @@
 import streamlit as st
 from qiskit_ibm_runtime import QiskitRuntimeService, Session, Options
-from qiskit import QuantumCircuit, transpile, assemble
+from qiskit import QuantumCircuit, transpile
 import openai
 
 # Set your OpenAI API key
@@ -25,10 +25,12 @@ def ask_gpt4(prompt):
 
 # Function to run a quantum circuit
 def run_quantum_circuit(circuit, backend_name):
-    backend = service.backend(backend_name)
+    backends = service.backends(backend_name)
+    if not backends:
+        raise ValueError(f"No backend found for {backend_name}")
+    backend = backends[0]
     transpiled_circuit = transpile(circuit, backend)
-    qobj = assemble(transpiled_circuit)
-    job = backend.run(qobj)
+    job = backend.run(transpiled_circuit)
     result = job.result()
     return result
 
@@ -36,7 +38,7 @@ def run_quantum_circuit(circuit, backend_name):
 def main():
     st.title("Quantum AI Assistant")
     query = st.text_input("Enter your question:")
-    
+
     if query:
         with st.spinner("Running quantum circuit..."):
             # Create a simple quantum circuit
