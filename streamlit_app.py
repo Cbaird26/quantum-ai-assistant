@@ -1,25 +1,23 @@
-# Save the Streamlit app to a file
-with open('streamlit_app.py', 'w') as f:
-    f.write("""
-import streamlit as st
-from qiskit_ibm_provider import IBMProvider, IBMProviderError
-from qiskit import QuantumCircuit, transpile, execute
 import openai
+from qiskit_ibm_provider import IBMProvider, IBMProviderError
+from qiskit import QuantumCircuit, transpile, assemble
+import streamlit as st
 
 # Set your OpenAI API key
 openai.api_key = 'sk-proj-rjQkZR2EpFXe0O6fQ0gjT3BlbkFJ57LMTOzYuycUalwgCQvp'
 
-# Load IBMQ account and set up provider
+# Save and load IBMQ account using your API token
 try:
     provider = IBMProvider(token='efaee3112cb68eb568bde505587ca5c445cb28d0469c0704bd13d947fa7d9b4ece88e056397209eba60e573d1abf966d721132824147d841b90c3de33e8ff817')
 except IBMProviderError as e:
-    print(f"Failed to load IBM Q account: {e}")
+    st.error(f"Failed to load IBM Q account: {e}")
 
 # Function to run a quantum circuit
 def run_quantum_circuit(circuit, backend_name):
     backend = provider.get_backend(backend_name)
     compiled_circuit = transpile(circuit, backend)
-    job = execute(compiled_circuit, backend)
+    qobj = assemble(compiled_circuit)
+    job = backend.run(qobj)
     result = job.result()
     return result.get_counts()
 
@@ -60,4 +58,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-""")
